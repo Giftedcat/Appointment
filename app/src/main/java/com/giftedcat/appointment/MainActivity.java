@@ -58,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
 
         tvStartTime.setOnClickListener(new MyOnclick());
         tvEndTime.setOnClickListener(new MyOnclick());
+        findViewById(R.id.tv_confirm).setOnClickListener(new MyOnclick());
         pvTime = new OptionsPickerBuilder(this, new OnOptionsSelectListener() {
             @Override
             public void onOptionsSelect(int options1, int options2, int options3, View v) {
@@ -114,6 +115,22 @@ public class MainActivity extends AppCompatActivity {
         return AppointDateUtil.cumulativeTime(timeStampList.get(selectTime[0]), Long.parseLong(hours.get(selectTime[1])), Long.parseLong(minutes.get(selectTime[2])));
     }
 
+    /**
+     * 显示时间选择弹窗
+     * */
+    private void showPickerView(int num){
+        select_num = num;
+        switch (num){
+            case 0:
+                pvTime.setTitleText("开始时间");
+                break;
+            case 1:
+                pvTime.setTitleText("结束时间");
+                break;
+        }
+        pvTime.show();
+    }
+
     private class MyOnclick implements View.OnClickListener{
 
         @Override
@@ -121,18 +138,17 @@ public class MainActivity extends AppCompatActivity {
             switch (v.getId()){
                 case R.id.tv_start_time:
                     /** 选择开始时间*/
-                    select_num = 0;
-                    pvTime.setTitleText("开始时间");
-                    pvTime.show();
+                    showPickerView(0);
                     break;
                 case R.id.tv_end_time:
                     /** 选择结束时间*/
-                    select_num = 1;
-                    pvTime.setTitleText("结束时间");
-                    pvTime.show();
+                    showPickerView(1);
                     break;
                 case R.id.tv_confirm:
                     /** 提交*/
+                    long start_time = DateUtil.dateToStamp(tvStartTime.getText().toString());
+                    long end_time = DateUtil.dateToStamp(tvEndTime.getText().toString());
+                    Toast.makeText(mContext, "开始时间：" + start_time + "\r\n结束时间：" + end_time, Toast.LENGTH_SHORT).show();
                     break;
             }
         }
